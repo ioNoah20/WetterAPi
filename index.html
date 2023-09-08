@@ -15,42 +15,68 @@
         <button id="suchButton">Suchen</button>
     </div>
     <div id="wetterInfo">
-        <p>Stadt: <span id="ort"></span></p>
-        <p>Temperatur: <span id="temperatur"></span>°C</p>
+        <p>Temperatur: <span id="temperatur"></span></p>
         <p>Wetterzustand: <span id="wetterZustand"></span></p>
+    
+        
+
     </div>
 
-  
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    const suchButton = document.getElementById('suchButton');
-    const ortElement = document.getElementById('ort');
+    document.addEventListener('DOMContentLoaded', () => {
     const temperaturElement = document.getElementById('temperatur');
     const wetterZustandElement = document.getElementById('wetterZustand');
-    const stadtElement = document.getElementById('stadt');
-
     const apiKey = 'fc113072f4c388f84c0a44f92c803686';
+  
 
-    suchButton.addEventListener('click', () => {
-        const stadt = stadtInput.value.trim();
+    
 
-        if (stadt) {
-            fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.length > 0) {
-                        const ort = data[0].name;
-                        ortElement.textContent = ort;
-                        // Sie müssen die Wetterdaten separat abrufen, da "data" hier die Ortsdaten enthält, nicht die Wetterdaten.
-                        // Stellen Sie sicher, dass Sie die Wetterdaten richtig abrufen und anzeigen.
-                    } else {
-                        ortElement.textContent = 'Stadt nicht gefunden';
-                    }
-                });
+    if (suchButton) {
+            suchButton.addEventListener('click', () => {
+                const stadt = stadtInput.value.trim();
+
+                if (stadt) {
+                    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.length > 0) {
+                                const latitude = data[0].lat;
+                                const longitude = data[0].lon;
+
+                                // Rufen Sie die Wetterdaten von OpenWeatherMap basierend auf den Koordinaten der Stadt ab
+                                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+                                    .then((response) => response.json())
+                                    .then((wetterData) => {
+                                        if (wetterData.cod === 200) {
+                                            // Wetterdaten anzeigen
+                                            temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) + '°C'; // Temperatur in Celsius umrechnen
+                                            wetterZustandElement.textContent = wetterData.weather[0].description;
+                                        } else {
+                                            // Fehlermeldung anzeigen, wenn die Daten nicht abgerufen werden können
+                                            temperaturElement.textContent = 'Nicht verfügbar';
+                                            wetterZustandElement.textContent = 'Nicht verfügbar';
+                                            stadtElement.textContent = 'Nicht verfügbar';
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.error('Fehler beim Abrufen der Wetterdaten:', error);
+                                    });
+                            } else {
+                                // Fehlermeldung anzeigen, wenn die Stadt nicht gefunden wird
+                                temperaturElement.textContent = 'Nicht verfügbar';
+                                wetterZustandElement.textContent = 'Nicht verfügbar';
+                                stadtElement.textContent = 'Stadt nicht gefunden';
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Fehler beim Abrufen der Stadtinformationen:', error);
+                        });
+                }
+            });
         }
     });
-});
+
 
 </script>
 

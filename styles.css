@@ -1,26 +1,43 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-}
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    display: flex;
 
-.container {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    max-width: 300px;
-    margin: 0 auto;
+    align-items: center;
+    height: 100vh; /* 100% der Bildschirmhöhe nutzen */
+    flex-direction: column; /* Elemente in vertikaler Ausrichtung zentrieren */
 }
 
 h1 {
-    font-size: 24px;
+    color: #333;
 }
 
-#wetterIcon {
-    width: 100px;
-    height: 100px;
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
 }
 
-p {
-    font-size: 18px;
+input[type="text"],
+input[type="email"] {
+    width: 40%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    width: 40%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
