@@ -1,14 +1,23 @@
+@import "https://unpkg.com/open-props" layer(design.system);
+@import "https://unpkg.com/open-props/normalize.min.css";
+
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 100px;
+    margin-left: 400px;
     background-color: #f0f0f0;
     display: flex;
-
+    justify-content: center;
     align-items: center;
-    height: 100vh; /* 100% der Bildschirmhöhe nutzen */
-    flex-direction: column; /* Elemente in vertikaler Ausrichtung zentrieren */
+    height: 50vh;
+    width: 1000px; 
+    text-align: center;
+   
+    flex-direction: column;
+    align-items: center;
 }
+
+
 
 h1 {
     color: #333;
@@ -22,16 +31,15 @@ label {
     text-align: center;
 }
 
-input[type="text"],
-input[type="email"] {
-    width: 40%;
+input {
+    width: 50%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-button[type="submit"] {
+button {
     background-color: #007bff;
     color: #fff;
     width: 40%;
@@ -40,4 +48,15 @@ button[type="submit"] {
     border-radius: 5px;
     cursor: pointer;
 }
+
+
+  .rounded-border-gradient {
+
+    border: solid var(--size-2) transparent;
+    border-radius: var(--radius-4);
+    background: 
+      linear-gradient(var(--surface-1), var(--surface-1)) padding-box, 
+      var(--gradient-1) border-box;
+  }
+
 

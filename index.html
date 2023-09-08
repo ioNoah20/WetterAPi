@@ -6,11 +6,13 @@
     <title>Wetteranzeige</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-<body>
-
-
+<body class="rounded-border-gradient">
     <h1>Wetteranzeige</h1>
+    <br>
+    <br>
+    <br>
     <div>
+    <div >
         <input type="text" id="stadtInput" placeholder="Stadt eingeben">
         <button id="suchButton">Suchen</button>
     </div>
@@ -19,24 +21,25 @@
         <p>Wetterzustand: <span id="wetterZustand"></span></p>
     
         
-
+    </div>
     </div>
 
 
     <script>
+
+
     document.addEventListener('DOMContentLoaded', () => {
     const temperaturElement = document.getElementById('temperatur');
     const wetterZustandElement = document.getElementById('wetterZustand');
     const apiKey = 'fc113072f4c388f84c0a44f92c803686';
   
 
-    
-
     if (suchButton) {
             suchButton.addEventListener('click', () => {
                 const stadt = stadtInput.value.trim();
 
                 if (stadt) {
+                    // Stadt wird durch die Eingabe genutzt 
                     fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
                         .then((response) => response.json())
                         .then((data) => {
@@ -44,38 +47,27 @@
                                 const latitude = data[0].lat;
                                 const longitude = data[0].lon;
 
-                                // Rufen Sie die Wetterdaten von OpenWeatherMap basierend auf den Koordinaten der Stadt ab
+                                // Wetterdaten von OpenWeatherMap basierend auf den Koordinaten der Stadt 
                                 fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
                                     .then((response) => response.json())
                                     .then((wetterData) => {
                                         if (wetterData.cod === 200) {
                                             // Wetterdaten anzeigen
-                                            temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) + '°C'; // Temperatur in Celsius umrechnen
+                                            temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) + '°C'; 
                                             wetterZustandElement.textContent = wetterData.weather[0].description;
-                                        } else {
-                                            // Fehlermeldung anzeigen, wenn die Daten nicht abgerufen werden können
-                                            temperaturElement.textContent = 'Nicht verfügbar';
-                                            wetterZustandElement.textContent = 'Nicht verfügbar';
-                                            stadtElement.textContent = 'Nicht verfügbar';
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        console.error('Fehler beim Abrufen der Wetterdaten:', error);
-                                    });
+                                        } 
+                                    }) 
                             } else {
                                 // Fehlermeldung anzeigen, wenn die Stadt nicht gefunden wird
-                                temperaturElement.textContent = 'Nicht verfügbar';
-                                wetterZustandElement.textContent = 'Nicht verfügbar';
-                                stadtElement.textContent = 'Stadt nicht gefunden';
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Fehler beim Abrufen der Stadtinformationen:', error);
-                        });
-                }
-            });
-        }
-    });
+                                temperaturElement.textContent = 'Gibt es nicht';
+                                wetterZustandElement.textContent = 'vllt vertippt :)?';
+                              
+                        }
+                 })
+            }
+        });
+    }
+});
 
 
 </script>
