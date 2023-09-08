@@ -9,15 +9,15 @@
 </head>
 <body>
 <div class="background">
-    <div class="background">
+    <div class="backgroundh1">
         <h1>Wetteranzeige</h1>
         <br>
         <br>
         <br>
         <input type="text" id="stadtInput" placeholder="Stadt eingeben">
-        <button id="suchButton">Suchen</button>
+        <button  class="backgroundbutton" id="suchButton">Suchen</button>
     </div>
-    <div  id="wetterInfo">
+<div  id="wetterInfo">
         <p>Temperatur: <span id="temperatur"></span></p>
         <p>Wetterzustand: <span id="wetterZustand"></span></p>
         <p>Temp. Min: <span id="tempMin"></span>°C</p>
@@ -80,7 +80,7 @@
                                             tempMinElement.textContent = (wetterData.main.temp_min - 273.15).toFixed(2) ;
                                             tempMaxElement.textContent = (wetterData.main.temp_max - 273.15).toFixed(2) ;
                                             gefuehltElement.textContent = (wetterData.main.feels_like - 273.15).toFixed(2) ;
-                                            luftdruckElement.textContent = wetterData.main.pressure + ' hPa';
+                                            luftdruckElement.textContent = wetterData.main.pressure ;
                                             luftfeuchtigkeitElement.textContent = wetterData.main.humidity;
                                             windgeschwindigkeitElement.textContent = wetterData.wind.speed ;
                                             landElement.textContent = wetterData.sys.country;
