@@ -5,32 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wetteranzeige</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+   
 </head>
-<body class="rounded-border-gradient">
-    <h1>Wetteranzeige</h1>
-    <br>
-    <br>
-    <br>
-    <div>
-    <div >
+<body>
+<div class="background">
+    <div class="background">
+        <h1>Wetteranzeige</h1>
+        <br>
+        <br>
+        <br>
         <input type="text" id="stadtInput" placeholder="Stadt eingeben">
         <button id="suchButton">Suchen</button>
     </div>
-    <div id="wetterInfo">
+    <div  id="wetterInfo">
         <p>Temperatur: <span id="temperatur"></span></p>
         <p>Wetterzustand: <span id="wetterZustand"></span></p>
+        <p>Temp. Min: <span id="tempMin"></span>°C</p>
+        <p>Temp. Max: <span id="tempMax"></span>°C</p>
+        <p>Gefühlt: <span id="gefuehlt"></span>°C</p>
+        <p>Luftdruck: <span id="luftdruck"></span> hPa</p>
+        <p>Luftfeuchtigkeit: <span id="luftfeuchtigkeit"></span>%</p>
+        <p>Windgeschwindigkeit: <span id="windgeschwindigkeit"></span> m/s</p>
+        <p>Land: <span id="land"></span></p>
+        <p>Sonnenaufgang: <span id="sonnenaufgang"></span></p>
+        <p>Sonnenuntergang: <span id="sonnenuntergang"></span></p>
     
         
     </div>
-    </div>
+</div>
 
 
     <script>
 
 
     document.addEventListener('DOMContentLoaded', () => {
+    const suchButton = document.getElementById('suchButton');
+    const stadtInput = document.getElementById('stadtInput');
     const temperaturElement = document.getElementById('temperatur');
     const wetterZustandElement = document.getElementById('wetterZustand');
+    const tempMinElement = document.getElementById('tempMin');
+    const tempMaxElement = document.getElementById('tempMax');
+    const gefuehltElement = document.getElementById('gefuehlt');
+    const luftdruckElement = document.getElementById('luftdruck');
+    const luftfeuchtigkeitElement = document.getElementById('luftfeuchtigkeit');
+    const windgeschwindigkeitElement = document.getElementById('windgeschwindigkeit');
+    const landElement = document.getElementById('land');
+    const sonnenaufgangElement = document.getElementById('sonnenaufgang');
+    const sonnenuntergangElement = document.getElementById('sonnenuntergang');
     const apiKey = 'fc113072f4c388f84c0a44f92c803686';
   
 
@@ -46,6 +67,7 @@
                             if (data.length > 0) {
                                 const latitude = data[0].lat;
                                 const longitude = data[0].lon;
+                                
 
                                 // Wetterdaten von OpenWeatherMap basierend auf den Koordinaten der Stadt 
                                 fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
@@ -53,8 +75,17 @@
                                     .then((wetterData) => {
                                         if (wetterData.cod === 200) {
                                             // Wetterdaten anzeigen
-                                            temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) + '°C'; 
+                                            temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) +'C°'; 
                                             wetterZustandElement.textContent = wetterData.weather[0].description;
+                                            tempMinElement.textContent = (wetterData.main.temp_min - 273.15).toFixed(2) ;
+                                            tempMaxElement.textContent = (wetterData.main.temp_max - 273.15).toFixed(2) ;
+                                            gefuehltElement.textContent = (wetterData.main.feels_like - 273.15).toFixed(2) ;
+                                            luftdruckElement.textContent = wetterData.main.pressure + ' hPa';
+                                            luftfeuchtigkeitElement.textContent = wetterData.main.humidity;
+                                            windgeschwindigkeitElement.textContent = wetterData.wind.speed ;
+                                            landElement.textContent = wetterData.sys.country;
+                                            sonnenaufgangElement.textContent = new Date(wetterData.sys.sunrise * 1000).toLocaleTimeString();
+                                            sonnenuntergangElement.textContent = new Date(wetterData.sys.sunset * 1000).toLocaleTimeString();
                                         } 
                                     }) 
                             } else {

@@ -1,22 +1,29 @@
-@import "https://unpkg.com/open-props" layer(design.system);
-@import "https://unpkg.com/open-props/normalize.min.css";
+
 
 body {
     font-family: Arial, sans-serif;
-    margin: 100px;
-    margin-left: 400px;
-    background-color: #f0f0f0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50vh;
-    width: 1000px; 
     text-align: center;
-   
     flex-direction: column;
     align-items: center;
+    background-image: url(src/weather-xqhs9axpy8btfd3y.jpg)
+    
+    
+}
+.background{
+  background-color: lightgray;
+  justify-content: center;
+  align-items: center;
+  margin: 100px;
+  margin-left: 100px;
+  border-radius: 10px;
 }
 
+p{
+    text-align: left;
+    margin-left: 110px;
+   
+}
 
 
 h1 {
@@ -24,39 +31,36 @@ h1 {
 }
 
 
-label {
-    display: block;
-    margin-bottom: 10px;
-    color: #333;
-    text-align: center;
-}
 
 input {
-    width: 50%;
+    width: 60%;
     padding: 10px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 button {
     background-color: #007bff;
-    color: #fff;
-    width: 40%;
+    width: 30%;
+    color: #f0f0f0;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+   
 }
 
-
-  .rounded-border-gradient {
-
-    border: solid var(--size-2) transparent;
-    border-radius: var(--radius-4);
-    background: 
-      linear-gradient(var(--surface-1), var(--surface-1)) padding-box, 
-      var(--gradient-1) border-box;
+#suchButton{
+    border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
+    border-radius: 10px;
+    transition: all .4s ease;
   }
+  #suchButton:hover {
+    
+    box-shadow: 3px 3px #007bff;
+  }
+
+  
+
+ 
 
 
