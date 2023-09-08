@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wetteranzeige</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+
+    <h1>Wetteranzeige</h1>
+    <div>
+        <input type="text" id="stadtInput" placeholder="Stadt eingeben">
+        <button id="suchButton">Suchen</button>
+    </div>
+    <div id="wetterInfo">
+        <p>Stadt: <span id="ort"></span></p>
+        <p>Temperatur: <span id="temperatur"></span>°C</p>
+        <p>Wetterzustand: <span id="wetterZustand"></span></p>
+    </div>
+
+  
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const suchButton = document.getElementById('suchButton');
+    const ortElement = document.getElementById('ort');
+    const temperaturElement = document.getElementById('temperatur');
+    const wetterZustandElement = document.getElementById('wetterZustand');
+    const stadtElement = document.getElementById('stadt');
+
+    const apiKey = 'fc113072f4c388f84c0a44f92c803686';
+
+    suchButton.addEventListener('click', () => {
+        const stadt = stadtInput.value.trim();
+
+        if (stadt) {
+            fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.length > 0) {
+                        const ort = data[0].name;
+                        ortElement.textContent = ort;
+                        // Sie müssen die Wetterdaten separat abrufen, da "data" hier die Ortsdaten enthält, nicht die Wetterdaten.
+                        // Stellen Sie sicher, dass Sie die Wetterdaten richtig abrufen und anzeigen.
+                    } else {
+                        ortElement.textContent = 'Stadt nicht gefunden';
+                    }
+                });
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>
