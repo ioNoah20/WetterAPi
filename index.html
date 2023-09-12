@@ -25,12 +25,16 @@
         <p>Gefühlt: <span id="gefuehlt"></span>°C</p>
         <p>Luftdruck: <span id="luftdruck"></span> hPa</p>
         <p>Luftfeuchtigkeit: <span id="luftfeuchtigkeit"></span>%</p>
-        <p>Windgeschwindigkeit: <span id="windgeschwindigkeit"></span> m/s</p>
+        <p>Windgeschwindigkeit🌫️ <span id="windgeschwindigkeit"></span> m/s</p>
         <p>Land: <span id="land"></span></p>
-        <p>Sonnenaufgang: <span id="sonnenaufgang"></span></p>
-        <p>Sonnenuntergang: <span id="sonnenuntergang"></span></p>
+        <p>Sonnenaufgang☀️</ion-icon> <span id="sonnenaufgang"></span></p>
+        <p>Sonnenuntergang🌙<span id="sonnenuntergang"></span></p>
     
         
+    </div>
+    <div id="forecast">
+        <h2>5-Day Forecast</h2>
+        <!-- Forecast data will be displayed here -->
     </div>
 </div>
 
@@ -38,7 +42,7 @@
     <script>
 
 
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const suchButton = document.getElementById('suchButton');
     const stadtInput = document.getElementById('stadtInput');
     const temperaturElement = document.getElementById('temperatur');
@@ -53,53 +57,80 @@
     const sonnenaufgangElement = document.getElementById('sonnenaufgang');
     const sonnenuntergangElement = document.getElementById('sonnenuntergang');
     const apiKey = 'fc113072f4c388f84c0a44f92c803686';
-  
+    const forecastElement = document.getElementById('forecast'); // Get the forecast div
 
     if (suchButton) {
-            suchButton.addEventListener('click', () => {
-                const stadt = stadtInput.value.trim();
+        suchButton.addEventListener('click', () => {
+            const stadt = stadtInput.value.trim();
 
-                if (stadt) {
-                    // Stadt wird durch die Eingabe genutzt 
-                    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.length > 0) {
-                                const latitude = data[0].lat;
-                                const longitude = data[0].lon;
-                                
+            if (stadt) {
+                // Stadt wird durch die Eingabe genutzt
+                fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            const latitude = data[0].lat;
+                            const longitude = data[0].lon;
 
-                                // Wetterdaten von OpenWeatherMap basierend auf den Koordinaten der Stadt 
-                                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
-                                    .then((response) => response.json())
-                                    .then((wetterData) => {
-                                        if (wetterData.cod === 200) {
-                                            // Wetterdaten anzeigen
-                                            temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) +'C°'; 
-                                            wetterZustandElement.textContent = wetterData.weather[0].description;
-                                            tempMinElement.textContent = (wetterData.main.temp_min - 273.15).toFixed(2) ;
-                                            tempMaxElement.textContent = (wetterData.main.temp_max - 273.15).toFixed(2) ;
-                                            gefuehltElement.textContent = (wetterData.main.feels_like - 273.15).toFixed(2) ;
-                                            luftdruckElement.textContent = wetterData.main.pressure ;
-                                            luftfeuchtigkeitElement.textContent = wetterData.main.humidity;
-                                            windgeschwindigkeitElement.textContent = wetterData.wind.speed ;
-                                            landElement.textContent = wetterData.sys.country;
-                                            sonnenaufgangElement.textContent = new Date(wetterData.sys.sunrise * 1000).toLocaleTimeString();
-                                            sonnenuntergangElement.textContent = new Date(wetterData.sys.sunset * 1000).toLocaleTimeString();
-                                        } 
-                                    }) 
-                            } else {
-                                // Fehlermeldung anzeigen, wenn die Stadt nicht gefunden wird
-                                temperaturElement.textContent = 'Gibt es nicht';
-                                wetterZustandElement.textContent = 'vllt vertippt :)?';
-                              
+                            // Wetterdaten von OpenWeatherMap basierend auf den Koordinaten der Stadt
+                            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+                                .then((response) => response.json())
+                                .then((wetterData) => {
+                                    if (wetterData.cod === 200) {
+                                        // Wetterdaten anzeigen
+                                        temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) + 'C°';
+                                        wetterZustandElement.textContent = wetterData.weather[0].description;
+                                        tempMinElement.textContent = (wetterData.main.temp_min - 273.15).toFixed(2);
+                                        tempMaxElement.textContent = (wetterData.main.temp_max - 273.15).toFixed(2);
+                                        gefuehltElement.textContent = (wetterData.main.feels_like - 273.15).toFixed(2);
+                                        luftdruckElement.textContent = wetterData.main.pressure;
+                                        luftfeuchtigkeitElement.textContent = wetterData.main.humidity;
+                                        windgeschwindigkeitElement.textContent = wetterData.wind.speed;
+                                        landElement.textContent = wetterData.sys.country;
+                                        sonnenaufgangElement.textContent = new Date(wetterData.sys.sunrise * 1000).toLocaleTimeString();
+                                        sonnenuntergangElement.textContent = new Date(wetterData.sys.sunset * 1000).toLocaleTimeString();
+                                    }
+                                });
+                            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+                                .then((response) => response.json())
+                                .then((forecastData) => {
+                                    if (forecastData.cod === '200') {
+                                        // Display the forecast data
+                                        displayForecast(forecastData, forecastElement);
+                                    } else {
+                                        // Display an error message if the forecast data is not available
+                                        forecastElement.textContent = 'Forecast not available.';
+                                    }
+                                });
                         }
-                 })
+                    });
             }
         });
     }
 });
 
+function displayForecast(forecastData, forecastElement) {
+    // Clear previous forecast data
+    forecastElement.innerHTML = '';
+
+    // Loop through the forecast list (every 3 hours for 5 days)
+    forecastData.list.forEach((item) => {
+        // Extract and format the date and time
+        const dateTime = new Date(item.dt * 1000).toLocaleString();
+
+        // Create a forecast item element and add the data
+        const forecastItem = document.createElement('div');
+        forecastItem.classList.add('forecast-item'); // You can style this class in your CSS
+        forecastItem.innerHTML = `
+            <p>Date/Time: ${dateTime}</p>
+            <p>Temperature: ${item.main.temp}°C</p>
+            <p>Weather: ${item.weather[0].description}</p>
+        `;
+
+        // Append the forecast item to the forecastElement
+        forecastElement.appendChild(forecastItem);
+    });
+}
 
 </script>
 
