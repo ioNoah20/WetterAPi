@@ -34,7 +34,6 @@
     </div>
     <div id="forecast">
         <h2>5-Day Forecast</h2>
-        <!-- Forecast data will be displayed here -->
     </div>
 </div>
 
@@ -57,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sonnenaufgangElement = document.getElementById('sonnenaufgang');
     const sonnenuntergangElement = document.getElementById('sonnenuntergang');
     const apiKey = 'fc113072f4c388f84c0a44f92c803686';
-    const forecastElement = document.getElementById('forecast'); // Get the forecast div
+    const forecastElement = document.getElementById('forecast'); 
 
     if (suchButton) {
         suchButton.addEventListener('click', () => {
@@ -97,10 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (forecastData.cod === '200') {
                                         // Display the forecast data
                                         displayForecast(forecastData, forecastElement);
-                                    } else {
-                                        // Display an error message if the forecast data is not available
-                                        forecastElement.textContent = 'Forecast not available.';
-                                    }
+                                    } 
                                 });
                         }
                     });
@@ -118,9 +114,9 @@ function displayForecast(forecastData, forecastElement) {
         // Extract and format the date and time
         const dateTime = new Date(item.dt * 1000).toLocaleString();
 
-        // Create a forecast item element and add the data
+        
         const forecastItem = document.createElement('div');
-        forecastItem.classList.add('forecast-item'); // You can style this class in your CSS
+        forecastItem.classList.add('forecast-item'); 
         forecastItem.innerHTML = `
             <p>Date/Time: ${dateTime}</p>
             <p>Temperature: ${item.main.temp}°C</p>
