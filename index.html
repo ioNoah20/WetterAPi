@@ -17,112 +17,129 @@
         <button  class="backgroundbutton" id="suchButton">Suchen</button>
     </div>
 <div  id="wetterInfo">
-    <h2 class="wetter-icon-container">
+    <h2  class="wetter-icon-container"  style="display: none;">
         Temperatur: <span id="temperatur"></span><span id="wetterIcon"></span>
     </h2>
-        <p>Wetterzustand: <span id="wetterZustand"></span></p>
-        <p>Temp. Min: <span id="tempMin"></span>°C</p>
-        <p>Temp. Max: <span id="tempMax"></span>°C</p>
-        <p>Gefühlt: <span id="gefuehlt"></span>°C</p>
-        <p>Luftdruck: <span id="luftdruck"></span> hPa</p>
-        <p>Luftfeuchtigkeit: <span id="luftfeuchtigkeit"></span>%</p>
-        <p>Windgeschwindigkeit🌫️ <span id="windgeschwindigkeit"></span> m/s</p>
-        <p>Land: <span id="land"></span></p>
-        <p>Sonnenaufgang☀️ <span id="sonnenaufgang"></span></p>
-        <p>Sonnenuntergang🌙 <span id="sonnenuntergang"></span></p>
+    <p style="display: none;" id="tempZustand">Wetterzustand: <span id="wetterZustand"></span></p>
+    <p style="display: none;" id="tempMinText">Temp. Min: <span id="tempMin"></span>°C</p>
+    <p style="display: none;" id="tempMaxText">Temp. Max: <span id="tempMax"></span>°C</p>
+    <p style="display: none;" id="tempGefuehlt">Gefühlt: <span id="gefuehlt"></span>°C</p>
+    <p style="display: none;" id="tempLuftdruck">Luftdruck: <span id="luftdruck"></span> hPa</p>
+    <p style="display: none;" id="tempLuftfeuchtigkeit">Luftfeuchtigkeit: <span id="luftfeuchtigkeit"></span>%</p>
+    <p style="display: none;" id="tempWind">Windgeschwindigkeit🌫️ <span id="windgeschwindigkeit"></span> m/s</p>
+    <p style="display: none;" id="tempLand">Land: <span id="land"></span></p>
+    <p style="display: none;" id="tempSonnenaufgang">Sonnenaufgang☀️ <span id="sonnenaufgang"></span></p>
+    <p style="display: none;" id="tempSonnenuntergang">Sonnenuntergang🌙 <span id="sonnenuntergang"></span></p>
     </div>
 </div>
 <h2>5-Tage Vorhersage</h2>
 <div class="forecast-container" id="forecast"></div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const suchButton = document.getElementById('suchButton');
-    const stadtInput = document.getElementById('stadtInput');
-    const temperaturElement = document.getElementById('temperatur');
-    const wetterZustandElement = document.getElementById('wetterZustand');
-    const tempMinElement = document.getElementById('tempMin');
-    const tempMaxElement = document.getElementById('tempMax');
-    const gefuehltElement = document.getElementById('gefuehlt');
-    const luftdruckElement = document.getElementById('luftdruck');
-    const luftfeuchtigkeitElement = document.getElementById('luftfeuchtigkeit');
-    const windgeschwindigkeitElement = document.getElementById('windgeschwindigkeit');
-    const landElement = document.getElementById('land');
-    const sonnenaufgangElement = document.getElementById('sonnenaufgang');
-    const sonnenuntergangElement = document.getElementById('sonnenuntergang');
-    const wetterIconElement = document.getElementById('wetterIcon'); 
-    const apiKey = 'fc113072f4c388f84c0a44f92c803686';
-    const forecastElement = document.getElementById('forecast'); 
-
-    if (suchButton) {
-        suchButton.addEventListener('click', () => {
-            const stadt = stadtInput.value.trim();
-
-    if (stadt) {
-        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.length > 0) {
-                    const latitude = data[0].lat;
-                    const longitude = data[0].lon;
-
-                        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
-                            .then((response) => response.json())
-                            .then((wetterData) => {
-                                if (wetterData.cod === 200) {
-                                    temperaturElement.textContent = (wetterData.main.temp - 273.15).toFixed(2) + 'C°';
-                                    wetterZustandElement.textContent = wetterData.weather[0].description;
-                                    tempMinElement.textContent = (wetterData.main.temp_min - 273.15).toFixed(2);
-                                    tempMaxElement.textContent = (wetterData.main.temp_max - 273.15).toFixed(2);
-                                    gefuehltElement.textContent = (wetterData.main.feels_like - 273.15).toFixed(2);
-                                    luftdruckElement.textContent = wetterData.main.pressure;
-                                    luftfeuchtigkeitElement.textContent = wetterData.main.humidity;
-                                    windgeschwindigkeitElement.textContent = wetterData.wind.speed;
-                                    landElement.textContent = wetterData.sys.country;
-                                    sonnenaufgangElement.textContent = new Date(wetterData.sys.sunrise * 1000).toLocaleTimeString();
-                                    sonnenuntergangElement.textContent = new Date(wetterData.sys.sunset * 1000).toLocaleTimeString();
-                                    const weatherIconCode = wetterData.weather[0].icon; 
-                                    const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}.png`; 
-                                    wetterIconElement.innerHTML = `<img src="${weatherIconUrl}" alt="Wetter-Icon">`; 
-                                    }
-                                });
-                            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
-                                .then((response) => response.json())
-                                .then((forecastData) => {
-                                    if (forecastData.cod === '200') {
-                                        displayForecast(forecastData, forecastElement);
-                            } 
+    document.addEventListener('DOMContentLoaded', () => {
+        const suchButton = document.getElementById('suchButton');
+        const stadtInput = document.getElementById('stadtInput');
+        const temperaturElement = document.getElementById('temperatur');
+        const wetterZustandElement = document.getElementById('wetterZustand');
+        const tempMinElement = document.getElementById('tempMin');
+        const tempMaxElement = document.getElementById('tempMax');
+        const gefuehltElement = document.getElementById('gefuehlt');
+        const luftdruckElement = document.getElementById('luftdruck');
+        const luftfeuchtigkeitElement = document.getElementById('luftfeuchtigkeit');
+        const windgeschwindigkeitElement = document.getElementById('windgeschwindigkeit');
+        const landElement = document.getElementById('land');
+        const sonnenaufgangElement = document.getElementById('sonnenaufgang');
+        const sonnenuntergangElement = document.getElementById('sonnenuntergang');
+        const wetterIconElement = document.getElementById('wetterIcon'); 
+        const apiKey = 'fc113072f4c388f84c0a44f92c803686'; 
+        const forecastElement = document.getElementById('forecast'); 
+    
+        if (suchButton) {
+            suchButton.addEventListener('click', () => {
+                const stadt = stadtInput.value.trim();
+    
+                if (stadt) {
+                    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${stadt}&limit=5&appid=${apiKey}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.length > 0) {
+                                const latitude = data[0].lat;
+                                const longitude = data[0].lon;
+    
+                                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+                                    .then((response) => response.json())
+                                    .then((wetterData) => {
+                                        if (wetterData.cod === 200) {
+                                            const temperatureCelsius = (wetterData.main.temp - 273.15).toFixed(2);
+                                            if (temperatureCelsius) {
+                                                temperaturElement.textContent = temperatureCelsius + 'C°';
+                                                temperaturElement.style.display = 'block';
+                                            } 
+                                            const temperaturH2 = document.querySelector('.wetter-icon-container');
+                                            temperaturH2.style.display = 'block';       
+                                            document.getElementById('tempZustand').style.display = 'block';
+                                            document.getElementById('tempMinText').style.display = 'block';
+                                            document.getElementById('tempMaxText').style.display = 'block';
+                                            document.getElementById('tempGefuehlt').style.display = 'block';
+                                            document.getElementById('tempLuftdruck').style.display = 'block';
+                                            document.getElementById('tempLuftfeuchtigkeit').style.display = 'block';
+                                            document.getElementById('tempWind').style.display = 'block';
+                                            document.getElementById('tempLand').style.display = 'block';
+                                            document.getElementById('tempSonnenaufgang').style.display = 'block';
+                                            document.getElementById('tempSonnenuntergang').style.display = 'block';
+    
+                                            wetterZustandElement.textContent = wetterData.weather[0].description;
+                                            tempMinElement.textContent = (wetterData.main.temp_min - 273.15).toFixed(2);
+                                            tempMaxElement.textContent = (wetterData.main.temp_max - 273.15).toFixed(2);
+                                            gefuehltElement.textContent = (wetterData.main.feels_like - 273.15).toFixed(2);
+                                            luftdruckElement.textContent = wetterData.main.pressure;
+                                            luftfeuchtigkeitElement.textContent = wetterData.main.humidity;
+                                            windgeschwindigkeitElement.textContent = wetterData.wind.speed;
+                                            landElement.textContent = wetterData.sys.country;
+                                            sonnenaufgangElement.textContent = new Date(wetterData.sys.sunrise * 1000).toLocaleTimeString();
+                                            sonnenuntergangElement.textContent = new Date(wetterData.sys.sunset * 1000).toLocaleTimeString();
+                                            const weatherIconCode = wetterData.weather[0].icon;
+                                            const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}.png`;
+                                            wetterIconElement.innerHTML = `<img src="${weatherIconUrl}" alt="Wetter-Icon">`;
+                                        }
+                                    });
+                                fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+                                    .then((response) => response.json())
+                                    .then((forecastData) => {
+                                        if (forecastData.cod === '200') {
+                                            displayForecast(forecastData, forecastElement);
+                                        } 
+                                    });
+                            }
                         });
-                    }
-                });
-            }
-        });
-    }
-});
-
-function displayForecast(forecastData, forecastElement) {
-    forecastElement.innerHTML = '';
-
-    const forecastContainer = document.createElement('div');
-    forecastContainer.classList.add('forecast-container');
-
-    forecastData.list.forEach((item) => {
-        const dateTime = new Date(item.dt * 1000).toLocaleString();
-
-        const forecastItem = document.createElement('div');
-        forecastItem.classList.add('forecast-item'); 
-        forecastItem.innerHTML = `
-            <p>Date/Time: ${dateTime}</p>
-            <p>Temperature: ${(item.main.temp - 273.15).toFixed(2)}°C</p>
-            <p>Weather: ${item.weather[0].description}</p>
-        `;
-
-        forecastContainer.appendChild(forecastItem);
+                }
+            });
+        }
     });
-
-    forecastElement.appendChild(forecastContainer);
-}
-</script>
-
+    
+    function displayForecast(forecastData, forecastElement) {
+        forecastElement.innerHTML = '';
+    
+        const forecastContainer = document.createElement('div');
+        forecastContainer.classList.add('forecast-container');
+    
+        forecastData.list.forEach((item) => {
+            const dateTime = new Date(item.dt * 1000).toLocaleString();
+    
+            const forecastItem = document.createElement('div');
+            forecastItem.classList.add('forecast-item'); 
+            forecastItem.innerHTML = `
+                <p>Date/Time: ${dateTime}</p>
+                <p>Temperature: ${(item.main.temp - 273.15).toFixed(2)}°C</p>
+                <p>Weather: ${item.weather[0].description}</p>
+            `;
+    
+            forecastContainer.appendChild(forecastItem);
+        });
+    
+        forecastElement.appendChild(forecastContainer);
+    }
+    </script>
+    
 </body>
 </html>
